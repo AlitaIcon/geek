@@ -13,6 +13,8 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.util.Objects;
 
+import static com.geek.hm.utils.PathUtils.defaultPath;
+
 public class FlowMain extends Configured implements Tool {
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
@@ -31,8 +33,17 @@ public class FlowMain extends Configured implements Tool {
         //第一步:指定文件的读取方式和读取路径
         job.setInputFormatClass(TextInputFormat.class);
         //TextInputFormat.addInputPath(job, new Path("hdfs://node01:8020/wordcount"));
-        String path = Objects.requireNonNull(FlowMain.class.getClassLoader().getResource("")).getPath();
-        TextInputFormat.addInputPath(job, new Path(path+"\\HTTP_20130313143750.dat"));
+//        String path = Objects.requireNonNull(FlowMain.class.getClassLoader().getResource("")).getPath();
+        String path = defaultPath;
+//        path = "hdfs://emr-header-1.cluster-285604:9000/home/student5/resources";
+        if (args.length > 0){
+            System.out.println(args[0]);
+            if(!args[0].contains("hdfs")){
+                path = "file:///"+args[0];
+            }
+            System.out.println(path);
+        }
+        TextInputFormat.addInputPath(job, new Path(path+"/input/HTTP_20130313143750.dat"));
 
         //第二步:指定Map阶段的处理方式和数据类型
         job.setMapperClass(FlowMapper.class);
@@ -53,9 +64,14 @@ public class FlowMain extends Configured implements Tool {
         job.setOutputValueClass(FlowBean.class);
         //第八步: 设置输出类型
         job.setOutputFormatClass(TextOutputFormat.class);
-
+        String outputPath = path+"/output/flow_output";
         //设置输出的路径
-        TextOutputFormat.setOutputPath(job, PathUtils.outputFile("output\\flow_output"));
+        if(path.contains("hdfs")){
+            PathUtils.isPathExistOrDelete(outputPath, true);
+        }else {
+            PathUtils.outputFile(outputPath);
+        }
+        TextOutputFormat.setOutputPath(job, new Path(outputPath));
         //等待任务结束
         boolean bl = job.waitForCompletion(true);
         return bl ? 0:1;

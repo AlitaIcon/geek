@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 
 
 public class PathUtils {
+    public static String defaultPath = "hdfs://emr-header-1.cluster-285604:9000/home/student5/resources";
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
@@ -27,17 +28,17 @@ public class PathUtils {
         return dir.delete();
     }
 
-    public static Path outputFile(String path){
-        File file = new File(path);
+    public static void outputFile(String path){
+        File file = new File(path.substring(10));
         if (file.exists()){
             deleteDir(file);
         }
-        return new Path(path);
+//        return new Path(path);
     }
 
     public static void isPathExistOrDelete(String path, Boolean delete) throws IOException, URISyntaxException, InterruptedException {
         Configuration conf = new Configuration();
-        FileSystem fileSystem = FileSystem.get(new URI("hdfs://node1:8020"), conf, "root");
+        FileSystem fileSystem = FileSystem.get(new URI(defaultPath+"/output"), conf, "root");
         Path path1 = new Path(path);
         boolean exists = fileSystem.exists(path1);
         if (exists && delete){
