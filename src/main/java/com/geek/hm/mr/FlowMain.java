@@ -13,7 +13,7 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.util.Objects;
 
-import static com.geek.hm.utils.PathUtils.defaultPath;
+//import static com.geek.hm.utils.PathUtils.defaultPath;
 
 public class FlowMain extends Configured implements Tool {
     public static void main(String[] args) throws Exception {
@@ -34,12 +34,12 @@ public class FlowMain extends Configured implements Tool {
         job.setInputFormatClass(TextInputFormat.class);
         //TextInputFormat.addInputPath(job, new Path("hdfs://node01:8020/wordcount"));
 //        String path = Objects.requireNonNull(FlowMain.class.getClassLoader().getResource("")).getPath();
-        String path = defaultPath;
+        String path = "";
 //        path = "hdfs://emr-header-1.cluster-285604:9000/home/student5/resources";
         if (args.length > 0){
-            System.out.println(args[0]);
-            if(!args[0].contains("hdfs")){
-                path = "file:///"+args[0];
+            path = args[0];
+            if(!path.contains("hdfs")){
+                path = "file:///"+path;
             }
             System.out.println(path);
         }
