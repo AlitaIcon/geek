@@ -1,13 +1,13 @@
 package com.geek.hm.mr;
 
-import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 
-public class FlowBean implements Writable {
+public class FlowBean implements WritableComparable<FlowBean> {
     Integer upFlow;
     Integer downFlow;
     Integer countFlow;
@@ -56,4 +56,8 @@ public class FlowBean implements Writable {
         this.countFlow = countFlow;
     }
 
+    @Override
+    public int compareTo(FlowBean o) {
+        return this.countFlow - o.getCountFlow();
+    }
 }
