@@ -4,7 +4,7 @@ geek homework - hbase
 
 ## run
 ```shell
-hadoop jar geek-1.0-Hbase.jar ${hbase.master}
+java -jar geek-1.0-Hbase.jar ${hbase.master}
 ```
 or
 ```shell
