@@ -47,8 +47,8 @@ public class HBaseHM {
         //list_namespace
         NamespaceDescriptor[] namespaceDescriptors = admin.listNamespaceDescriptors();
 
-        for (int i = 0 ; i < namespaceDescriptors.length;i++) {
-            String name = namespaceDescriptors[i].getName();
+        for (NamespaceDescriptor namespaceDescriptor : namespaceDescriptors) {
+            String name = namespaceDescriptor.getName();
             System.out.println(name);
         }
         Arrays.stream(namespaceDescriptors).forEach((nsd)->{
@@ -88,13 +88,13 @@ public class HBaseHM {
         }
 
         // 查看数据
-        for (int i = 0; i < rowKeys.size(); i++) {
-            readRows(rowKeys.get(i), conn);
+        for (String rowKey : rowKeys) {
+            readRows(rowKey, conn);
         }
 
         // 删除数据
-        for (int i = 0; i < rowKeys.size(); i++) {
-            Delete delete = new Delete(Bytes.toBytes(rowKeys.get(i)));      // 指定rowKey
+        for (String rowKey : rowKeys) {
+            Delete delete = new Delete(Bytes.toBytes(rowKey));      // 指定rowKey
             conn.getTable(tableName).delete(delete);
             System.out.println("Delete Success");
         }
