@@ -5,7 +5,7 @@ geek homework - hive
 ## run
 ```sql
 # Q1
-select avg(r.rate) from t_rating r left join t_movie m left join t_user u  on r.movieid=m.movieid and r.userid=u.userid group by u.age;
+select u.age, avg(r.rate) from t_rating r left join t_movie m left join t_user u  on r.movieid=m.movieid and r.userid=u.userid group by u.age;
 # Q2
 select m.moviename, avg(r.rate), count(r.userid) from t_movie m left join t_rating r left join t_user u  on r.movieid=m.movieid and r.userid=u.userid where u.sex='男' group by m.moviename having count(r.userid)>50 limit 10;
 # Q3
